@@ -1,0 +1,38 @@
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+//var socket = new io.Socket({host:'192.168.1.172', port:3000, connectTimeout:3000});
+var socket = io.connect('http://192.168.1.172:3000');
+//var socket = new io.Socket('http://localhost:3000');
+// サーバに接続する
+//socket.connect();
+// サーバに接続したとき
+socket.on('connect', function(msg) {
+				  document.getElementById("connectId").innerHTML = 
+				      "あなたの接続ID::" + socket.transport.sessid;
+					  });
+
+// メッセージを受けたとき
+socket.on('message', function(msg) {
+				  document.getElementById("receiveMsg").innerHTML = msg;
+				  });
+
+// メッセージを送る
+function SendMsg() {
+		  var msg = document.getElementById("message").value;
+		  socket.emit('message', msg);
+		  //  socket.send(msg);
+}
+// 切断する
+function DisConnect() {
+		  socket.send(socket.transport.sessionid + "は切断しました。");
+		    socket.disconnect();
+}
+</script>
+
+<h1>socket.ioのサンプルプログラム</h1>
+<div id="connectId"></div>
+<input type="text" id="message" value="">
+<input type="button" value="メッセージを送る" onclick="SendMsg()">
+<input type="button" value="切断する" onclick="DisConnect()">
+<div id="receiveMsg"></div>
+
